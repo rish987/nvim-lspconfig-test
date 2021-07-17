@@ -9,13 +9,13 @@ then
   if test -f ".fail"
   then
     # ignore existing errors in PRs
-    if [ "$6" = "pull_request" ]; then echo "$fail_msg Ignoring existing issue for this PR..."; exit 0; fi
-    echo "Existing issue found: \#$number."
+    if [ "$6" = "pull_request" ]; then echo "$fail_msg Ignoring existing issue #$number for this PR..."; exit 0; fi
+    echo "Existing issue found: #$number."
     echo "$fail_msg"
     exit 1
   else
-    if [ "$6" = "pull_request" ]; then exit 0; fi
-    echo "Test passed; closing issue \#$number..."
+    if [ "$6" = "pull_request" ]; then echo "Fix implemented; not closing issue #$number for a PR (will be closed on merge)..."; exit 0; fi
+    echo "Test passed; closing issue #$number..."
     curl --request POST \
     --url https://api.github.com/repos/$2/issues/$number/comments \
     --header "authorization: Bearer $3" \
