@@ -1,14 +1,20 @@
 cd ./tests/$1
+
+fail_msg="Tests failed; see \"Run tests\" step for more information."
+
 issue_title="\`$1\` failure"
-if curl --fail https://api.github.com/repos/rish987/nvim-lspconfig-test/issues?state=open | jq "map(select(.title == \"$issue_title\"))" | jq '.[0]' -e | jq '.number' -e &> .number
+if curl --fail https://api.github.com/repos/$2/issues?state=open | jq "map(select(.title == \"$issue_title\"))" | jq '.[0]' -e | jq '.number' -e &> .number
 then
   number=$(cat .number)
   if test -f ".fail"
   then
+    # ignore existing errors in PRs
+    if [ "$6" = "pull_request" ]; then echo "$fail_msg Ignoring existing issue for this PR..."; exit 0; fi
     echo "Existing issue found: \#$number."
-    echo "Tests failed; see \"Run tests\" step for more information."
+    echo "$fail_msg"
     exit 1
   else
+    if [ "$6" = "pull_request" ]; then exit 0; fi
     echo "Test passed; closing issue \#$number..."
     curl --request POST \
     --url https://api.github.com/repos/$2/issues/$number/comments \
@@ -31,6 +37,8 @@ then
 else
   if test -f ".fail"
   then
+    # do not allow PRs to introduce failures
+    if [ "$6" = "pull_request" ]; then echo "$fail_msg Not creating new issue for a PR..."; exit 1; fi
     curl --request POST \
     --url https://api.github.com/repos/$2/issues \
     --header "authorization: Bearer $3" \
@@ -40,7 +48,7 @@ else
       \"body\": \"\`$1\` failure @ $5; see workflow [$4](https://github.com/$2/actions/runs/$4) \n\n $(cat issue_body)\"\
       }" \
     --fail &> /dev/null
-    echo "Tests failed; see \"Run tests\" step for more information."
+    echo "$fail_msg"
     exit 1
   else
     exit 0
