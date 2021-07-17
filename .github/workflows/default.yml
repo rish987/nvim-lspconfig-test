@@ -1,6 +1,13 @@
 name: default
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+      - test
+  pull_request:
+    branches:
+      - main
 
 permissions:
   issues: write
