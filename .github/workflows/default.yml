@@ -29,7 +29,7 @@ jobs:
         continue-on-error : true
       - name: Update issues
         run: |
-          ./update_issues.sh leanls '${{ secrets.GITHUB_TOKEN }}'
+          ./update_issues.sh leanls '${{ github.repository }}' '${{ secrets.GITHUB_TOKEN }}' '${{ github.run_id }}' '${{ github.sha }}'
   lean3ls:
     runs-on: ubuntu-latest
     steps:

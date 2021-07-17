@@ -1,5 +1,5 @@
 cd ./tests/$1
-issue_title="$1 failure"
+issue_title="\`$1\` failure"
 if curl --fail https://api.github.com/repos/rish987/nvim-lspconfig-test/issues?state=open | jq "map(select(.title == \"$issue_title\"))" | jq '.[0]' -e | jq '.number' -e &> .number
 then
   number=$(cat .number)
@@ -10,26 +10,34 @@ then
     exit 1
   else
     echo "Test passed; closing issue \#$number..."
+    curl --request POST \
+    --url https://api.github.com/repos/$2/issues/$number/comments \
+    --header "authorization: Bearer $3" \
+    --header 'content-type: application/json' \
+    --data "{ \
+      \"body\": \"Resolved @ $5; see workflow [$4](https://github.com/$2/actions/runs/$4)\"\
+      }" \
+    --fail &> /dev/null
     curl --request PATCH \
-    --url https://api.github.com/repos/rish987/nvim-lspconfig-test/issues/$number \
-    --header "authorization: Bearer $2" \
+    --url https://api.github.com/repos/$2/issues/$number \
+    --header "authorization: Bearer $3" \
     --header 'content-type: application/json' \
     --data "{ \
       \"state\": \"closed\"\
       }" \
-    --fail
+    --fail &. /dev/null
     exit 0
   fi
 else
   if test -f ".fail"
   then
     curl --request POST \
-    --url https://api.github.com/repos/rish987/nvim-lspconfig-test/issues \
-    --header "authorization: Bearer $2" \
+    --url https://api.github.com/repos/$2/issues \
+    --header "authorization: Bearer $3" \
     --header 'content-type: application/json' \
     --data "{ \
       \"title\": \"$issue_title\",\
-      \"body\": \"$(cat issue_body)\"\
+      \"body\": \"\`$1\` failure @ $5; see workflow [$4](https://github.com/$2/actions/runs/$4) \n\n $(cat issue_body)\"\
       }" \
     --fail &> /dev/null
     echo "Tests failed; see \"Run tests\" step for more information."
