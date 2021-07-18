@@ -3,7 +3,7 @@ cd ./tests/$1
 fail_msg="Tests failed; see \"Run tests\" step for more information."
 
 issue_title="\`$1\` failure"
-if curl --fail https://api.github.com/repos/$3/issues?state=open | jq "map(select(.title == \"$issue_title\"))" | jq '.[0]' -e | jq '.number' -e &> .number
+if curl -s --fail https://api.github.com/repos/$3/issues?state=open | jq "map(select(.title == \"$issue_title\"))" | jq '.[0]' -e | jq '.number' -e &> .number
 then
   number=$(cat .number)
   if test -f ".fail"
@@ -31,7 +31,7 @@ then
     --data "{ \
       \"state\": \"closed\"\
       }" \
-    --fail &. /dev/null
+    --fail &> /dev/null
     exit 0
   fi
 else
