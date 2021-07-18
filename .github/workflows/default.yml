@@ -30,6 +30,8 @@ jobs:
         run: |
           curl -OL https://raw.githubusercontent.com/norcalli/bot-ci/master/scripts/github-actions-setup.sh
           source github-actions-setup.sh nightly-x64
+      - name: Run setup
+        run: ./run_setup.sh leanls
       - name: Run tests
         run: ./run_test.sh leanls
         continue-on-error : true
