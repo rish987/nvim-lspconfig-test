@@ -1,3 +1,4 @@
+export NVIM_TEST_PATH=$(realpath .)
 cd tests/$1
 if ./test.sh 
 then
