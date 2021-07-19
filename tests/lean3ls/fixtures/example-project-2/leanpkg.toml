@@ -1,0 +1,5 @@
+[package]
+name = "example-lean3-project"
+version = "0.1"
+lean_version = "leanprover-community/lean:3.31.0"
+path = "src"
