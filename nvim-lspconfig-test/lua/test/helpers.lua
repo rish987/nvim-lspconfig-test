@@ -39,14 +39,30 @@ function M.wait_for_ready_lsp()
   assert.message("LSP server was never ready.").True(succeeded)
 end
 
+-- follows the implementation of `location_handler()` from lua/vim/lsp/handlers.lua
 function M.definition_parser(result)
-  if not result[1] or not type(result[1].targetUri) == "string" then return nil end
-  return result[1].targetUri
+  if not result then return nil end
+
+  local def_list = {}
+  if vim.tbl_islist(result) then
+    for _, this_result in pairs(result) do
+      local uri = this_result.uri or this_result.targetUri
+      if uri then table.insert(def_list, uri) end
+    end
+  else
+    local uri = result.uri or result.targetUri
+    if uri then table.insert(def_list, uri) end
+  end
+
+  if #def_list == 0 then return nil end
+
+  return table.concat(def_list, "\n")
 end
 
 function M.hover_parser(result)
-  if not result.contents or not type(result.contents.value) == "string" then return nil end
-  return result.contents.value
+  if not (result and result.contents) then return nil end
+  local markdown_lines = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
+  return table.concat(markdown_lines, "\n")
 end
 
 return M
