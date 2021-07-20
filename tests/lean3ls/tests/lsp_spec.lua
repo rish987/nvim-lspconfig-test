@@ -45,7 +45,7 @@ describe('lean 3', function()
   end)
   end)
 
-  -- tests nvim-lua/nvim-lspconfig#1041
+  -- tests neovim/nvim-lspconfig#1041
   describe('new', function()
   describe('nested file', function()
     it('startup', function()

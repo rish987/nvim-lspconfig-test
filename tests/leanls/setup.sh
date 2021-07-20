@@ -16,6 +16,4 @@ PATH="$HOME/.elan/bin/:$PATH"
 
 # pre-build fixtures
 ( cd fixtures/example-project-1 && leanpkg configure && leanpkg build; )
-
-# pre-build fixtures
 ( cd fixtures/example-project-2 && leanpkg configure && leanpkg build; )

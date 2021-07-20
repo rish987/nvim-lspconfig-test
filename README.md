@@ -3,7 +3,7 @@ NOTE: this repo is currently under review before upstreaming to `nvim-lua` -- pl
 
 Tests for configurations implemented in [`neovim/nvim-lspconfig`](https://github.com/neovim/nvim-lspconfig).
 
-This repo tests are run on a nightly basis, and config-specific issues are created/closed automatically when tests fail/pass.
+This repo's tests are run on a nightly basis, and config-specific issues are created/closed automatically when tests fail/pass.
 
 ## Why test?
 Much like `neovim/nvim-lspconfig`, this repo is community-driven. We highly recommend adding tests for your language server to it! Doing so will:
