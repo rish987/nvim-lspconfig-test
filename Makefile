@@ -13,4 +13,4 @@ setup: packpath
 
 test: packpath
 	@${check_test_var}
-	( export NVIM_TEST_PATH=$(realpath .); cd ./tests/${TEST} && ./test.sh; )
+	( export NVIM_TEST_PATH=$(realpath .); cd ./tests/${TEST} && ( if ! ./test.sh; then touch .fail; exit 1; fi ); )
