@@ -37,6 +37,14 @@ jobs:
           curl -OL https://raw.githubusercontent.com/norcalli/bot-ci/master/scripts/github-actions-setup.sh
           source github-actions-setup.sh nightly-x64
           echo $(realpath ./_neovim/bin) >> $GITHUB_PATH
+          echo ID 1 ${{ job.container.id }}
+          echo ID 2 ${{ job.container.network }}
+          echo ID 3 $GITHUB_RUN_ID
+          echo ID 4 $GITHUB_RUN_NUMBER
+          echo ID 5 $GITHUB_ACTION
+          echo ID 6 $GITHUB_ACTION_PATH
+          echo ID 7 $GITHUB_JOB
+          echo ID 8 $GITHUB_WORKFLOW
       - name: Run setup
         run: TEST=${{ matrix.config }} make setup
       - name: Run tests
