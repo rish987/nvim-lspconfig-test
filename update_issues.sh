@@ -14,7 +14,7 @@ fail_msg="Tests failed; see \"Run tests\" step for more information."
 
 issue_title="\`$server\` failure on \`$os\`"
 
-curl -sS --fail $GITHUB_API_URL/repos/$repo/issues?state=open > .issues
+curl -sS --fail --header "authorization: Bearer $key" $GITHUB_API_URL/repos/$repo/issues?state=open > .issues
 
 test -s .issues
 
