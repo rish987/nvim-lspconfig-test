@@ -12,7 +12,7 @@ fail_msg="Tests failed; see \"Run tests\" step for more information."
 
 issue_title="\`$server\` failure on \`$os\`"
 
-if curl -s --fail https://api.github.com/repos/$repo/issues?state=open | jq "map(select(.title == \"$issue_title\"))" | jq '.[0]' -e | jq '.number' -e &> .number
+if curl -s --fail https://api.github.com/repos/$repo/issues?state=open | jq "map(select(.title == \"$issue_title\"))" | jq '.[0]' -e | jq '.number' -e > .number
 then
   number=$(cat .number)
   if test -f ".fail"
