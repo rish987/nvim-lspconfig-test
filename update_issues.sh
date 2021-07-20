@@ -54,7 +54,7 @@ else
     --header 'content-type: application/json' \
     --data "{ \
       \"title\": \"$issue_title\",\
-      \"body\": \"\`$server\` failure @ $commit; see workflow [$workflow](https://github.com/$repo/actions/runs/$workflow) \n\n $(cat issue_body)\"\
+      \"body\": \"\`$server\` failure on \`$os\` @ $commit; see workflow [$workflow](https://github.com/$repo/actions/runs/$workflow) \n\n $(cat issue_body)\"\
       }" \
     --fail &> /dev/null
     echo "$fail_msg"
