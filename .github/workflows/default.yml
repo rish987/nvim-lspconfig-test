@@ -32,9 +32,9 @@ jobs:
           source github-actions-setup.sh nightly-x64
           echo $(realpath ./_neovim/bin) >> $GITHUB_PATH
       - name: Run setup
-        run: ./run_setup.sh leanls
+        run: TEST=leanls make setup
       - name: Run tests
-        run: ./run_test.sh leanls
+        run: TEST=leanls make test
         continue-on-error : true
       - name: Update issues
         run: ./update_issues.sh leanls '${{ secrets.GITHUB_TOKEN }}' '${{ github.repository }}' '${{ github.run_id }}' '${{ github.sha }}' '${{ github.event_name }}'
