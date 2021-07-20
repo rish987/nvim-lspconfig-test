@@ -1,15 +1,16 @@
 server=$1
-key=$2
-repo=$3
-workflow=$4
-commit=$5
-trigger=$6
+os=$2
+key=$3
+repo=$GITHUB_REPOSITORY
+workflow=$GITHUB_RUN_ID
+commit=$GITHUB_SHA
+trigger=$GITHUB_EVENT_NAME
 
 cd ./tests/$server
 
 fail_msg="Tests failed; see \"Run tests\" step for more information."
 
-issue_title="\`$server\` failure"
+issue_title="\`$server\` failure on \`$os\`"
 
 if curl -s --fail https://api.github.com/repos/$repo/issues?state=open | jq "map(select(.title == \"$issue_title\"))" | jq '.[0]' -e | jq '.number' -e &> .number
 then

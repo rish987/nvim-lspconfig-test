@@ -1,19 +1,19 @@
 set -e 
 
-# set up lean language server
-if ! which elan > /dev/null; then
-  curl https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh -sSf | sh -s -- --default-toolchain "leanprover/lean4:nightly-2021-07-09" -y
-  if [ ! -z ${GITHUB_PATH+x} ]; then 
-    echo "$HOME/.elan/bin/" >> $GITHUB_PATH; 
-  else
-    echo 'PATH="$HOME/.elan/bin:$PATH"' >> $HOME/.profile
-  fi
-  PATH="$HOME/.elan/bin/:$PATH"
-fi
+LEAN_VERSION="leanprover/lean4:nightly-2021-07-09"
 
-if ! which lean-language-server > /dev/null; then
-  sudo npm install -g lean-language-server
+# set up lean language server
+if [ $RUNNER_OS = "Linux" ]; then
+  curl https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh -sSf | sh -s -- --default-toolchain "$LEAN_VERSION" -y
+elif [ $RUNNER_OS = "macOS" ]; then
+  brew install elan
+  elan toolchain install "$LEAN_VERSION"
+  elan default "$LEAN_VERSION"
 fi
+sudo npm install -g lean-language-server
+
+echo "$HOME/.elan/bin/" >> $GITHUB_PATH; 
+PATH="$HOME/.elan/bin/:$PATH"
 
 # pre-build fixtures
 ( cd fixtures/example-project-1 && leanpkg configure && leanpkg build; )

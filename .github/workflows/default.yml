@@ -19,11 +19,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-latest]
         config: [leanls, lean3ls]
-        include:
-          - os: ubuntu-latest
-            os-name: linux
     steps:
       - uses: actions/checkout@v2
       - run: date +%F > todays-date
@@ -32,15 +29,22 @@ jobs:
         with:
           path: _neovim
           key: ${{ runner.os }}-x64-${{ hashFiles('todays-date') }}
+        if: runner.os == 'Linux'
       - name: Install nvim
         run: |
           curl -OL https://raw.githubusercontent.com/norcalli/bot-ci/master/scripts/github-actions-setup.sh
           source github-actions-setup.sh nightly-x64
           echo $(realpath ./_neovim/bin) >> $GITHUB_PATH
+        if: runner.os == 'Linux'
+      - name: Install nvim
+        run: |
+          brew update
+          brew install --head neovim
+        if: runner.os == 'macOS'
       - name: Run setup
         run: TEST=${{ matrix.config }} make setup
       - name: Run tests
         run: TEST=${{ matrix.config }} make test
         continue-on-error : true
       - name: Update issues
-        run: ./update_issues.sh '${{ matrix.config }}' '${{ secrets.GITHUB_TOKEN }}' '${{ github.repository }}' '${{ github.run_id }}' '${{ github.sha }}' '${{ github.event_name }}'
+        run: ./update_issues.sh '${{ matrix.config }}' '${{ matrix.os }}' '${{ secrets.GITHUB_TOKEN }}'
