@@ -1,3 +1,5 @@
+set -e
+
 server=$1
 os=$2
 key=$3
@@ -12,8 +14,10 @@ fail_msg="Tests failed; see \"Run tests\" step for more information."
 
 issue_title="\`$server\` failure on \`$os\`"
 
+curl -sS --fail $GITHUB_API_URL/repos/$repo/issues?state=open > .issues
+
 # existing issue
-if curl -s --fail https://api.github.com/repos/$repo/issues?state=open | jq "map(select(.title == \"$issue_title\"))" | jq '.[0]' -e | jq '.number' -e > .number
+if cat .issues | jq "map(select(.title == \"$issue_title\"))" | jq '.[0]' -e | jq '.number' -e > .number
 then
   number=$(cat .number)
   # on MacOS only the last jq in the pipe above would intermittently exit 0, even when no existing issue -- not sure why... hence this check
@@ -29,15 +33,15 @@ then
       if [ "$trigger" = "pull_request" ]; then echo "Fix implemented; not closing issue #$number for a PR (will be closed on merge)..."; exit 0; fi
       echo "Test passed; closing issue #$number..."
       curl --request POST \
-      --url https://api.github.com/repos/$repo/issues/$number/comments \
+      --url $GITHUB_API_URL/repos/$repo/issues/$number/comments \
       --header "authorization: Bearer $key" \
       --header 'content-type: application/json' \
       --data "{ \
-        \"body\": \"Resolved @ $commit; see workflow [$workflow](https://github.com/$repo/actions/runs/$workflow)\"\
+        \"body\": \"Resolved @ $commit; see workflow [$workflow]($GITHUB_SERVER_URL/$repo/actions/runs/$workflow)\"\
         }" \
       --fail &> /dev/null
       curl --request PATCH \
-      --url https://api.github.com/repos/$repo/issues/$number \
+      --url $GITHUB_API_URL/repos/$repo/issues/$number \
       --header "authorization: Bearer $key" \
       --header 'content-type: application/json' \
       --data "{ \
