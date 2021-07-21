@@ -37,4 +37,4 @@ Feel free to make a PR title-prefixed with `[WIP]` as soon as you start working 
 
 ## Fixing problems
 
-An issue titled for your language server will automatically be created if your tests fail on a run. *Do not* close these tests manually! They will be automatically closed on a subsequent run where your tests pass.
+An issue titled for your language server will automatically be created if your tests fail on a run. *Do not* close these issues manually! They will be automatically closed on a subsequent run where your tests pass.
