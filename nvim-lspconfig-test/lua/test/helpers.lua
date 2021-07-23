@@ -7,7 +7,26 @@ local function has_all(_, arguments)
   return true
 end
 
+local function has_all_or(_, arguments)
+  local text = arguments[1]
+  local expecteds = arguments[2]
+  local found = false
+
+  for _, expected in pairs(expecteds) do
+    local found_this = true
+    for _, this_string in pairs(expected) do
+      if not string.find(text, this_string, nil, true) then
+        found_this = false
+      end
+    end
+    if found_this then found = true break end
+  end
+  assert.message("expected one of: \n" .. vim.inspect(expecteds) .. "\nbut got:\n" .. text).is_true(found)
+  return found
+end
+
 assert:register("assertion", "has_all", has_all)
+assert:register("assertion", "has_all_or", has_all_or)
 
 local M = {}
 
