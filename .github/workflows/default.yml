@@ -23,24 +23,10 @@ jobs:
         config: [leanls, lean3ls]
     steps:
       - uses: actions/checkout@v2
-      - run: date +%F > todays-date
-      - name: Restore cache for today's nightly.
-        uses: actions/cache@v2
+      - uses: rhysd/action-setup-vim@v1
         with:
-          path: _neovim
-          key: ${{ runner.os }}-x64-${{ hashFiles('todays-date') }}
-        if: runner.os == 'Linux'
-      - name: Install nvim
-        run: |
-          curl -OL https://raw.githubusercontent.com/norcalli/bot-ci/master/scripts/github-actions-setup.sh
-          source github-actions-setup.sh nightly-x64
-          echo $(realpath ./_neovim/bin) >> $GITHUB_PATH
-        if: runner.os == 'Linux'
-      - name: Install nvim
-        run: |
-          brew update
-          brew install --head neovim
-        if: runner.os == 'macOS'
+          neovim: true
+          version: v0.6.0
       - name: Run setup
         run: TEST=${{ matrix.config }} make setup
       - name: Run tests
