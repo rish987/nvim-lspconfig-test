@@ -1,4 +1,6 @@
-set -e
+#!/usr/bin/env bash
+
+set -euo pipefail
 
 server=$1
 os=$2

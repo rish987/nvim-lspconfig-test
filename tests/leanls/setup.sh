@@ -1,4 +1,6 @@
-set -e 
+#!/usr/bin/env bash
+
+set -euo pipefail
 
 LEAN_VERSION="leanprover/lean4:nightly-2021-07-09"
 
