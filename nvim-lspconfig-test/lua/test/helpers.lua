@@ -19,7 +19,10 @@ local function has_all_or(_, arguments)
         found_this = false
       end
     end
-    if found_this then found = true break end
+    if found_this then
+      found = true
+      break
+    end
   end
   assert.message("expected one of: \n" .. vim.inspect(expecteds) .. "\nbut got:\n" .. text).is_true(found)
   return found
@@ -39,13 +42,17 @@ function M.try_lsp_req(pos, method, parser)
   local req_result
   local success, _ = vim.wait(10000, function()
     local results = vim.lsp.buf_request_sync(0, method, params)
-    if not results or results[1] and results[1] == nil then return false end
+    if not results or results[1] and results[1] == nil then
+      return false
+    end
 
     for _, result in pairs(results) do
       req_result = result.result
     end
     text = parser(req_result)
-    if text and text ~= "" then return true end
+    if text and text ~= "" then
+      return true
+    end
 
     return false
   end, 1000)
@@ -60,26 +67,36 @@ end
 
 -- follows the implementation of `location_handler()` from lua/vim/lsp/handlers.lua
 function M.definition_parser(result)
-  if not result then return nil end
+  if not result then
+    return nil
+  end
 
   local def_list = {}
   if vim.tbl_islist(result) then
     for _, this_result in pairs(result) do
       local uri = this_result.uri or this_result.targetUri
-      if uri then table.insert(def_list, uri) end
+      if uri then
+        table.insert(def_list, uri)
+      end
     end
   else
     local uri = result.uri or result.targetUri
-    if uri then table.insert(def_list, uri) end
+    if uri then
+      table.insert(def_list, uri)
+    end
   end
 
-  if #def_list == 0 then return nil end
+  if #def_list == 0 then
+    return nil
+  end
 
   return table.concat(def_list, "\n")
 end
 
 function M.hover_parser(result)
-  if not (result and result.contents) then return nil end
+  if not (result and result.contents) then
+    return nil
+  end
   local markdown_lines = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
   return table.concat(markdown_lines, "\n")
 end
