@@ -15,12 +15,84 @@ permissions:
 
 jobs:
   default:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        config: [leanls, lean3ls]
+        server:
+          - angularls
+          - ansiblels
+          - arduino_language_server
+          - bashls
+          - bicep
+          - clangd
+          - clojure_lsp
+          - cmake
+          - codeqlls
+          - csharp_ls
+          - cssls
+          - dartls
+          - denols
+          - diagnosticls
+          - dockerls
+          - dotls
+          - efm
+          - elixirls
+          - elmls
+          - ember
+          - emmet_ls
+          - erlangls
+          - esbonio
+          - eslint
+          - fortls
+          - fsautocomplete
+          - gopls
+          - graphql
+          - groovyls
+          - hls
+          - html
+          - intelephense
+          - jdtls
+          - jedi_language_server
+          - jsonls
+          - jsonnet_ls
+          - kotlin_language_server
+          - lemminx
+          - ltex
+          - ocamlls
+          - omnisharp
+          - phpactor
+          - powershell_es
+          - prismals
+          - puppet
+          - purescriptls
+          - pylsp
+          - pyright
+          - quick_lint_js
+          - rescriptls
+          - rome
+          - rust_analyzer
+          - serve_d
+          - solang
+          - solargraph
+          - sorbet
+          - spectral
+          - sqlls
+          - sqls
+          - stylelint_lsp
+          - sumneko_lua
+          - svelte
+          - tailwindcss
+          - terraformls
+          - texlab
+          - tflint
+          - tsserver
+          - vala_ls
+          - vimls
+          - volar
+          - vuels
+          - yamlls
+          - zls
     steps:
       - uses: actions/checkout@v2
       - uses: rhysd/action-setup-vim@v1
@@ -32,5 +104,5 @@ jobs:
       - name: Run tests
         run: TEST=${{ matrix.config }} make test
         continue-on-error : true
-      - name: Update issues
-        run: ./update_issues.sh '${{ matrix.config }}' '${{ matrix.os }}' '${{ secrets.GITHUB_TOKEN }}'
+      # - name: Update issues
+      #   run: ./update_issues.sh '${{ matrix.config }}' '${{ matrix.os }}' '${{ secrets.GITHUB_TOKEN }}'
