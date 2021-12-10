@@ -100,7 +100,7 @@ jobs:
           neovim: true
           version: v0.6.0
       - name: Run tests
-        run: docker run --rm -ti -e TEST=$TEST -v $PWD:/lspconfig-tests williamboman/nvim-lspconfig-test:ubuntu bash -c 'cd /lspconfig-tests && make setup && make test'
+        run: docker run --rm -e TEST=$TEST -v $PWD:/lspconfig-tests williamboman/nvim-lspconfig-test:ubuntu bash -c 'cd /lspconfig-tests && make setup && make test'
         env:
           TEST: ${{ matrix.config }}
       # - name: Update issues
