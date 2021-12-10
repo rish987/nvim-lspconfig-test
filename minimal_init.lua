@@ -3,10 +3,8 @@ vim.o.directory = ""
 
 local __file__ = debug.getinfo(1).source:match("@(.*)$")
 local root_dir = vim.fn.fnamemodify(__file__, ":p:h")
-local packpath = root_dir .. "/packpath/*"
-vim.opt.runtimepath:append(packpath):append(root_dir .. "/nvim-lspconfig-test")
+vim.opt.runtimepath:append(root_dir)
 
-vim.cmd([[
-  runtime! plugin/lspconfig.vim
-  runtime! plugin/plenary.vim
-]])
+local packpath = root_dir .. "/packpath"
+vim.opt.packpath = packpath
+vim.cmd("packloadall")
