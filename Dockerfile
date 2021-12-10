@@ -60,6 +60,3 @@ RUN KEYRING=/usr/share/keyrings/nodesource.gpg; VERSION=node_16.x; DISTRO="$(lsb
     apt update && apt install -y nodejs
 
 ENV PATH "/root/.opam/default/bin:/usr/lib/dart/bin:/opt/nvim-linux64/bin:${PATH}"
-
-WORKDIR /lspconfig-tests
-COPY . .

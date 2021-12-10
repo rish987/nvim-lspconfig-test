@@ -99,10 +99,9 @@ jobs:
         with:
           neovim: true
           version: v0.6.0
-      - name: Run setup
-        run: TEST=${{ matrix.config }} make setup
       - name: Run tests
-        run: TEST=${{ matrix.config }} make test
-        continue-on-error : true
+        run: docker run --rm -ti -e TEST=$TEST -v $PWD:/lspconfig-tests williamboman/nvim-lspconfig-test:ubuntu bash -c 'cd /lspconfig-tests && make setup && make test'
+        env:
+          TEST: ${{ matrix.config }}
       # - name: Update issues
       #   run: ./update_issues.sh '${{ matrix.config }}' '${{ matrix.os }}' '${{ secrets.GITHUB_TOKEN }}'
