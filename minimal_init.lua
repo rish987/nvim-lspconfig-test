@@ -8,3 +8,7 @@ vim.opt.runtimepath:append(root_dir)
 local packpath = root_dir .. "/packpath"
 vim.opt.packpath = packpath
 vim.cmd("packloadall")
+
+require("nvim-lsp-installer").settings({
+  install_root_dir = root_dir .. "/lsp_servers",
+})
