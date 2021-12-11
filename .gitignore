@@ -1,11 +1,2 @@
-.fail
-packpath
-
-# for leanls
-/tests/leanls/fixtures/example-project-1/build
-/tests/leanls/fixtures/example-project-2/build
-/tests/leanls/**/*.olean
-
-# for lean3ls
-/tests/lean3ls/fixtures/*/leanpkg.path
-/tests/lean3ls/fixtures/**/*.olean
+/packpath
+/lsp_servers
